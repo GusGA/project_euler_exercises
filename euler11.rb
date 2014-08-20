@@ -23,9 +23,9 @@ row_20 = %w{ 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48 }
 
 string_to_interger = lambda {|a| a.map!{ |n| n.to_i} }
 
-rows = [row_1, row_2, row_3, row_4, row_5, 
-        row_6, row_7, row_8, row_9, row_10, 
-        row_11, row_12, row_13, row_14, row_15, 
+rows = [row_1, row_2, row_3, row_4, row_5,
+        row_6, row_7, row_8, row_9, row_10,
+        row_11, row_12, row_13, row_14, row_15,
         row_16, row_17, row_18, row_19, row_20]
 
 rows.each(&string_to_interger)
@@ -44,4 +44,17 @@ prod_to_the_left = (0...rows).map { |n| @matrix.row(n).each_cons(4).map { |a| a.
 
 prod_to_the_right = (0...rows).map { |n| @matrix.row(n).to_a.reverse.each_cons(4).map { |a| a.inject(:*) }.max }.max
 
-p [prod_upwards, prod_downwards , prod_to_the_left, prod_to_the_right].max
+diagonal_to_left = (0..16).map do |n|
+                      (0..16).map do |m|
+                        [@matrix.row(n)[m],@matrix.row(n+1)[m+1],@matrix.row(n+2)[m+2],@matrix.row(n+3)[m+3]].inject(:*)
+                      end
+                    end.map { |x| x.max}.max
+
+diagonal_to_right = (0..16).map do |n|
+                      (4..19).to_a.reverse.map do |m|
+                        [@matrix.row(n)[m],@matrix.row(n+1)[m-1],@matrix.row(n+2)[m-2],@matrix.row(n+3)[m-3]].inject(:*)
+                      end
+                    end.map { |x| x.max}.max
+
+
+p [prod_upwards, prod_downwards , prod_to_the_left, prod_to_the_right,diagonal_to_right,diagonal_to_left].max
